@@ -5,6 +5,7 @@ This repository holds the code for my data science internship tasks on logistics
 - **Week 1:** strategic plan for a last-mile delivery optimisation project
 - **Week 2:** data collection, cleaning and preprocessing
 - **Week 3:** exploratory data analysis and visualization
+- **Week 4:** predictive modeling and optimization
 
 The written reports for each week were submitted separately as Word documents. This repository holds the code that goes with them.
 
@@ -63,12 +64,39 @@ Outliers were found in Sales (488), Order Item Total (1,943) and Benefit per ord
 
 The charts are in the `charts/` folder.
 
+## Week 4: Predictive modeling and optimization
+
+`predictive_modeling.py` reads the cleaned file from Week 2 and works on two problems:
+
+**Part A: predicting actual shipping days (regression)**
+
+- Compares a baseline, linear regression, decision tree, random forest and gradient boosting
+- Uses 5-fold cross-validation and grid search for hyperparameters, and reports MAE, RMSE and R-squared
+- Leaves out delay, late flag and delivery status as inputs, because they already contain the answer
+- Tests different promised delivery times for each shipping mode
+
+**Part B: forecasting daily order volume**
+
+- Uses lagged values and calendar features, with a time-based train/test split and time-series cross-validation
+- Compares the forecast with a "same day last week" benchmark
+- Uses the forecast for a vehicle capacity planning example (the 40 items per vehicle figure is an assumption)
+
+**Main findings:**
+
+- All models beat the baseline (RMSE about 1.27 days against 1.62), but they perform almost the same, so a simple model is enough
+- Only shipping mode and scheduled days matter for shipping time; the other inputs add almost nothing
+- Realistic promised times cut the late rate from 57.3% to 15.9% (75th percentile policy)
+- The daily order forecast captures the average level of demand (MAPE about 6.4%) but not day-to-day swings
+
+The model charts are in the `charts/` folder.
+
 ## Files
 
 - `logistics_analysis.py`: Week 1 planning code
 - `data_cleaning.py`: Week 2 cleaning pipeline
 - `eda_visualization.py`: Week 3 analysis and charts
-- `charts/`: the 8 chart images from Week 3
+- `predictive_modeling.py`: Week 4 models and optimization
+- `charts/`: chart images from Weeks 3 and 4
 - `README.md`: this file
 
 ## How to run
@@ -85,6 +113,9 @@ python data_cleaning.py
 # Week 3 (needs cleaned_logistics_data.csv from Week 2)
 pip install seaborn
 python eda_visualization.py
+
+# Week 4 (needs cleaned_logistics_data.csv from Week 2)
+python predictive_modeling.py
 ```
 
 ## Data
